@@ -214,15 +214,15 @@ void Log::removeSentData(){
 }
 
 int Log::stationDataSend(long date, float amb_temp, int humi, float irrad, float w_spe, int w_dir, float rain, float pv_temp, float volt, float curr){
-  DataEncDec encoder(18); // 1 + 4 + 2 + 1 + 2 + 1 + 1 + 1 + 2 + 2 + 1 = 18
+  DataEncDec encoder(10); // All data: 1 + 4 + 2 + 1 + 2 + 1 + 1 + 1 + 2 + 2 + 1 = 18 // SOLAIRE: 1 + 4 + 2 + 2 + 1 = 10
   encoder.addHeader(ThisDevice, GATEWAY);
   encoder.addDate(date);
-  encoder.addTemp(amb_temp);
-  encoder.addHumi(humi);
-  encoder.addIrrad(irrad);
-  encoder.addWindSpeed(w_spe);
-  encoder.addWindDirection(w_dir);
-  encoder.addRain(rain);
+  // encoder.addTemp(amb_temp);
+  // encoder.addHumi(humi);
+  // encoder.addIrrad(irrad);
+  // encoder.addWindSpeed(w_spe);
+  // encoder.addWindDirection(w_dir);
+  // encoder.addRain(rain);
   encoder.addTemp(pv_temp);
   encoder.addVoltage(volt);
   encoder.addCurrent(curr);

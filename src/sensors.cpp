@@ -81,11 +81,11 @@ void Sensors::init()
 // ========= Read all data each second ============
 void Sensors::readAllData(float currGain, float voltGain)
 {
-  readTemp();
-  readHumidity();
-  readIradiance();
-  readWindDirection();
-  readRain();
+  // readTemp();
+  // readHumidity();
+  // readIradiance();
+  // readWindDirection();
+  // readRain();
   readPVtemp();
   readVoltage(voltGain);
   readCurrent(currGain);
