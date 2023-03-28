@@ -81,14 +81,20 @@ void Sensors::init()
 // ========= Read all data each second ============
 void Sensors::readAllData(float currGain, float voltGain)
 {
-  // readTemp();
-  // readHumidity();
-  // readIradiance();
-  // readWindDirection();
-  // readRain();
+  readTemp();
+  readHumidity();
+  readIradiance();
+  readWindDirection();
+  readRain();
   readPVtemp();
   readVoltage(voltGain);
   readCurrent(currGain);
+
+  // Serial.print("Wspeed: ");
+  // Serial.println(anemCounter);
+  
+
+  // Serial.println("\n");
 
   readTimes++;
 }
@@ -147,6 +153,8 @@ void Sensors::readTemp()
   // temp += 0;
   temp += sht20.temperature();
 
+  // Serial.print("Temp:");
+  // Serial.println(sht20.temperature());
 }
 
 void Sensors::readHumidity()
@@ -154,12 +162,17 @@ void Sensors::readHumidity()
   // humidity += bme.readHumidity();
   // humidity += 0;
   humidity += sht20.humidity();
+
+  // Serial.print("Hum: ");
+  // Serial.println(sht20.humidity());
 }
 
 void Sensors::readIradiance()
 {
   double AIN01 = ads1.readADC_Differential_0_1()*adsGain1;
   irradiance += AIN01*1000/(1.69/100)/4.4966;
+  // Serial.print("Irrad: ");
+  // Serial.println(AIN01*1000/(1.69/100)/4.4966);
 }
 
 void Sensors::readWindDirection()
@@ -174,6 +187,9 @@ void Sensors::readWindDirection()
   // Serial.print("adc: ");Serial.println(adc);
   float voltage = ((3.3/4095)*adcRead);
 
+  // Serial.print("Wdirection: ");
+  // Serial.println(voltage);
+
   if (voltage < 0.25) windDirection[7]++;       //315 - NO
   else if (voltage < 0.29) windDirection[6]++;  //270 - O
   else if (voltage < 0.37) windDirection[5]++;  //225 - SO
@@ -187,6 +203,8 @@ void Sensors::readWindDirection()
 void Sensors::readRain()
 {
   rain = pluvCounter*0.25;
+  // Serial.print("Rain: ");
+  // Serial.println(rain);
 }
 
 void Sensors::readPVtemp()
@@ -201,8 +219,11 @@ void Sensors::readPVtemp()
   steinhart /= BCOEFFICIENT;                   // 1/B * ln(R/Ro)
   steinhart += 1.0 / (TEMPERATURENOMINAL + 273.15); // + (1/To)
   steinhart = 1.0 / steinhart;                 // Invert
-  steinhart -= 273.15;    
+  steinhart -= 273.15;
   PVtemp +=  (steinhart);
+
+  // Serial.print("PV temp: ");
+  // Serial.println(steinhart);
 }
 
 void Sensors::readVoltage(float gain)
@@ -221,6 +242,8 @@ void Sensors::readVoltage(float gain)
   double OCV2 = adc_read*adsGain2;
   
   voltage += OCV2*gain;
+  // Serial.print("Voltage: ");
+  // Serial.println(OCV2*gain);
 }
 
 void Sensors::readCurrent(float gain)
@@ -231,6 +254,8 @@ void Sensors::readCurrent(float gain)
   }
   double OCV1 = adc_read*adsGain2;
   current += OCV1*gain;
+  // Serial.print("Current: ");
+  // Serial.println(OCV1*gain);
 }
 
 
@@ -272,10 +297,10 @@ String Sensors::getTemp()
 String Sensors::getHumidity()
 {
   humidity = humidity/readTimes;
-  if(humidity < 0){
+  if(humidity < 0) {
     humidity = 0;
   }
-  if(humidity > 100){
+  if(humidity > 100) {
     humidity = 100;
   }
   return String(humidity);
@@ -284,11 +309,10 @@ String Sensors::getHumidity()
 String Sensors::getIradiance()
 {
   irradiance = irradiance/readTimes;
-  if(irradiance < 0.47)
-  {
+  if(irradiance < 0.47) {
     irradiance = 0.0;
   }
-  if(irradiance > 6553.5){
+  if(irradiance > 6553.5) {
     irradiance = 6553.5;
   }
   return String(irradiance, 5);
@@ -358,10 +382,10 @@ String Sensors::getPVtemp()
 String Sensors::getVoltage()
 {
   voltage = voltage/readTimes;
-  if(voltage < 0){
+  if(voltage < 0) {
     voltage = 0;
   }
-  if(voltage > 6553.5){
+  if(voltage > 6553.5) {
     voltage = 6553.5;
   }
   return String(voltage, 5);
@@ -370,10 +394,10 @@ String Sensors::getVoltage()
 String Sensors::getCurrent()
 {
   current = current/readTimes;
-  if(current < 0){
+  if(current < 0) {
     current = 0;
   }
-  if(current > 25.5){
+  if(current > 25.5) {
     current = 25.5;
   }
   return String(current, 5);
