@@ -14,7 +14,7 @@ void Sensors::init()
   }
   catch(int e)
   {
-    throw "Could not find ADS1117(0x48)!";
+    throw "Could not find ADS1115(0x48)!";
   }
 
   try
@@ -25,7 +25,7 @@ void Sensors::init()
   }
   catch(int e)
   {
-    throw "Could not find ADS1117(0x49)!";
+    throw "Could not find ADS1115(0x49)!";
   }
 
   /*try
@@ -170,7 +170,7 @@ void Sensors::readHumidity()
 void Sensors::readIradiance()
 {
   double AIN01 = ads1.readADC_Differential_0_1()*adsGain1;
-  irradiance += AIN01*1000/(1.69/100)/4.4966;
+  irradiance += AIN01*1000/(1.23/100)/4.4966;
   // Serial.print("Irrad: ");
   // Serial.println(AIN01*1000/(1.69/100)/4.4966);
 }
