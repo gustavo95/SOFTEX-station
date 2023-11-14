@@ -170,7 +170,11 @@ void Sensors::readHumidity()
 void Sensors::readIradiance()
 {
   double AIN01 = ads1.readADC_Differential_0_1()*adsGain1;
-  irradiance += AIN01*1000/(1.23/100)/4.4966;
+  // Serial.println("----------------------");
+  // Serial.println(AIN01, 4);
+  // Serial.println(AIN01*(100/1.23)*1000);
+  // Serial.println("----------------------");
+  irradiance += AIN01*(100/1.23)*1000;
   // Serial.print("Irrad: ");
   // Serial.println(AIN01*1000/(1.69/100)/4.4966);
 }
@@ -190,14 +194,16 @@ void Sensors::readWindDirection()
   // Serial.print("Wdirection: ");
   // Serial.println(voltage);
 
-  if (voltage < 0.25) windDirection[7]++;       //315 - NO
-  else if (voltage < 0.29) windDirection[6]++;  //270 - O
-  else if (voltage < 0.37) windDirection[5]++;  //225 - SO
-  else if (voltage < 0.45) windDirection[4]++;  //180 - S
-  else if (voltage < 0.57) windDirection[3]++;  //135 - SE
-  else if (voltage < 0.77) windDirection[2]++;  //90 - E
-  else if (voltage < 1.2) windDirection[1]++;   //45 - NE
-  else if (voltage < 2) windDirection[0]++;     //0 - N
+  if (voltage < 0.25) windDirection[7]++;       //270 - NO
+  else if (voltage < 0.29) windDirection[6]++;  //225 - SO
+  else if (voltage < 0.37) windDirection[5]++;  //180 - S
+  else if (voltage < 0.45) windDirection[4]++;  //135 - SE
+  else if (voltage < 0.57) windDirection[3]++;  //90 - E
+  else if (voltage < 0.77) windDirection[2]++;  //45 - NE
+  else if (voltage < 1.2) windDirection[1]++;   //0 - N
+  else if (voltage < 2) windDirection[0]++;     //315 - NO
+
+  Serial.println(voltage);
 }
 
 void Sensors::readRain()
@@ -342,14 +348,14 @@ String Sensors::getWindDirection()
   for(int i=0; i<8; i++){
     if(windDirection[i] > mostDirection){
       mostDirection = windDirection[i];
-      if(i == 0) direction = 0;
-      if(i == 1) direction = 45;
-      if(i == 2) direction = 90;
-      if(i == 3) direction = 135;
-      if(i == 4) direction = 180;
-      if(i == 5) direction = 225;
-      if(i == 6) direction = 270;
-      if(i == 7) direction = 315;
+      if(i == 0) direction = 315;
+      if(i == 1) direction = 0;
+      if(i == 2) direction = 45;
+      if(i == 3) direction = 90;
+      if(i == 4) direction = 135;
+      if(i == 5) direction = 180;
+      if(i == 6) direction = 225;
+      if(i == 7) direction = 270;
     }
   }
 
